@@ -1,5 +1,5 @@
-﻿using FinanceApp.Api.Model.DTO;
-using FinanceApp.Api.Model.Transaction;
+﻿using FinanceApp.Api.Model;
+using FinanceApp.Api.Model.DTO;
 
 namespace FinanceApp.Api.IService
 {

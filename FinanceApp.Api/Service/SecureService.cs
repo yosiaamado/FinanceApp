@@ -2,7 +2,7 @@
 using FinanceApp.Api.Helper;
 using FinanceApp.Api.IService;
 using FinanceApp.Api.Model.DTO;
-using FinanceApp.Api.Model.User;
+using FinanceApp.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

@@ -1,7 +1,8 @@
 ﻿using FinanceApp.Api.Database;
 using FinanceApp.Api.Model.DTO;
 using FinanceApp.Api.IService;
-using FinanceApp.Api.Model.Transaction;
+using FinanceApp.Api.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApp.Api.Service
 {
@@ -22,6 +23,22 @@ namespace FinanceApp.Api.Service
 
             try
             {
+                var itemId = await _context.Items.Where(i => i.Name == trx.ItemName).Select(i => i.Id).FirstOrDefaultAsync();
+
+                if(itemId == 0)
+                {
+                    var newTempItem = new TempItem
+                    {
+                        Name = trx.ItemName,
+                        CreatedAt = DateTime.Now,
+                        IsReviewed = false,
+                        MovedToItemTable = false
+                    };
+
+                    await _context.TempItems.AddAsync(newTempItem);
+                    await _context.SaveChangesAsync();
+                }
+
                 var entity = new Transaction
                 {
                     ItemName = trx.ItemName,
@@ -32,6 +49,9 @@ namespace FinanceApp.Api.Service
                     LocalId = trx.LocalId,
                     SyncDate = DateTime.Now
                 };
+
+                if (itemId != 0)
+                    entity.ItemId = itemId;
 
                 await _transService.AddSyncTransaction(entity);
                 result.SyncStatus = SyncStatus.Synchronized;

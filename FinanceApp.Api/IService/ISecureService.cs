@@ -1,6 +1,5 @@
 ﻿using FinanceApp.Api.Model;
 using FinanceApp.Api.Model.DTO;
-using FinanceApp.Api.Model.User;
 
 namespace FinanceApp.Api.IService
 {

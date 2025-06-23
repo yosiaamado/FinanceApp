@@ -1,7 +1,6 @@
 ﻿using FinanceApp.Api.IService;
 using FinanceApp.Api.Model;
 using FinanceApp.Api.Model.DTO;
-using FinanceApp.Api.Model.User;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 

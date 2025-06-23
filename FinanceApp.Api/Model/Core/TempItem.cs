@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FinanceApp.Api.Model.Core
+namespace FinanceApp.Api.Model
 {
     public class TempItem
     {

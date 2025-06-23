@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FinanceApp.Api.Model;
+using System.ComponentModel.DataAnnotations;
 
-namespace FinanceApp.Api.Model.Core
+namespace FinanceApp.Api.Model
 {
     public class Item
     {
@@ -11,5 +12,6 @@ namespace FinanceApp.Api.Model.Core
         [Required]
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null;
+        public ICollection<Transaction> Transactions { get; set; }
     }
 }
