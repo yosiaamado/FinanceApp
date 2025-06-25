@@ -1,4 +1,5 @@
-﻿using FinanceApp.Api.Model;
+﻿using FinanceApp.Api.Helper;
+using FinanceApp.Api.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApp.Api.Database
@@ -13,6 +14,15 @@ namespace FinanceApp.Api.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                Email = "admin@senco.com".ToLower(), //bisa dommo
+                Password = EncryptionHelper.Hash("admin123"),
+                Username = "Admin",
+                Role = "Admin"
+            });
+
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Category)
                 .WithMany(c => c.Items)

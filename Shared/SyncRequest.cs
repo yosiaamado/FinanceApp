@@ -1,4 +1,4 @@
-﻿namespace FinanceApp.Api.Model.DTO
+﻿namespace FinanceApp.Shared
 {
     public class SyncRequest
     {

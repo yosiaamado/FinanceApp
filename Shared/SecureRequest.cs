@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FinanceApp.Api.Model.DTO
+namespace FinanceApp.Shared
 {
     public class LoginRequest
     {

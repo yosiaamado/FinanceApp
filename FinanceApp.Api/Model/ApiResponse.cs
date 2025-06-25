@@ -18,10 +18,4 @@
 
         public static ApiResponse<T> Failed(T data, string code = "-1") => new(code, data);
     }
-
-    public class Error
-    {
-        public string ErrorCode { get; set; } = string.Empty;
-        public string Message { get; set; } = string.Empty;
-    }
 }

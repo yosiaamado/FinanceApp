@@ -1,8 +1,9 @@
-﻿using FinanceApp.Api.Database;
+﻿using AutoMapper;
+using FinanceApp.Api.Database;
 using FinanceApp.Api.Helper;
 using FinanceApp.Api.IService;
-using FinanceApp.Api.Model.DTO;
 using FinanceApp.Api.Model;
+using FinanceApp.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,16 +16,18 @@ namespace FinanceApp.Api.Service
     {
         private readonly IConfiguration _config;
         private readonly AppDbContext _context;
-
-        public SecureService(IConfiguration config, AppDbContext context) 
+        private readonly IMapper _mapper;
+        public SecureService(IConfiguration config, AppDbContext context, IMapper mapper) 
         {
             _config = config;
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<bool> SignUp(User user)
+        public async Task<bool> SignUp(UserRequest request)
         {
-            var validate = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email || u.Username == user.Username);
+            var user = _mapper.Map<User>(request);
+            var validate = await _context.Users.FirstOrDefaultAsync(u => (u.Email == user.Email || u.Username == user.Username) && u.Role == "User");
 
             if (validate is not null)
                 throw new Exception("Username or Email Already Existed");
@@ -36,6 +39,25 @@ namespace FinanceApp.Api.Service
                 throw new Exception("Invalid Password Format");
 
             user.Password = EncryptionHelper.Hash(user.Password);
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> CreateUserAdmin(UserRequest request)
+        {
+            var user = _mapper.Map<User>(request);
+            var validate = await _context.Users.FirstOrDefaultAsync(u => (u.Email == user.Email || u.Username == user.Username) && u.Role == "Admin");
+
+            if (validate is not null)
+                throw new Exception("Username or Email Already Existed");
+
+            if (!user.Email.IsValidEmail())
+                throw new Exception("Invalid Email Format");
+
+            user.Password = EncryptionHelper.Hash(_config["AppSettings:DefaultAdminPassword"]!);
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -73,13 +95,15 @@ namespace FinanceApp.Api.Service
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Name, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Role)
             };
+
+            if (user.Role == "SuperAdmin")
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],

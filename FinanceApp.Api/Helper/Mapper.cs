@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FinanceApp.Api.Model;
-using FinanceApp.Api.Model.DTO;
+using FinanceApp.Shared;
 
 namespace FinanceApp.Api.Helper
 {
@@ -9,7 +9,7 @@ namespace FinanceApp.Api.Helper
         public MappingProfile()
         {
             CreateMap<TransactionRequest, Transaction>()
-                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity ?? 1));
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
         }
     }
 }

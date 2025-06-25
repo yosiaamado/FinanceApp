@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FinanceApp.Api.Database;
 using FinanceApp.Api.IService;
-using FinanceApp.Api.Model.DTO;
 using FinanceApp.Api.Model;
 using Microsoft.EntityFrameworkCore;
+using FinanceApp.Shared;
 
 namespace FinanceApp.Api.Service
 {
@@ -18,6 +18,41 @@ namespace FinanceApp.Api.Service
             _config = configuration;
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<PagedResult<Transaction>> GetTransactions(int page = 1, int pageSize = 10, DateTime? startDate = null, DateTime? endDate = null, string? item = null)
+        {
+            startDate ??= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            endDate ??= DateTime.Now;
+
+            var query = _context.Transactions
+                .Where(t => t.TransDate >= startDate && t.TransDate <= endDate);
+
+            if (!string.IsNullOrWhiteSpace(item))
+                query = query.Where(t => t.ItemName.Contains(item));
+
+            var transaction = await query
+                .OrderByDescending(t => t.TransDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var totalCount = await query.CountAsync();
+
+            return new PagedResult<Transaction>
+            {
+                Items = transaction,
+                TotalItems = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
+        public async Task<Transaction> GetTransaction(Int64 transactionId)
+        {
+            var transaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId);
+
+            return transaction ?? new Transaction();
         }
 
         public async Task<bool> AddTransaction(TransactionRequest request)

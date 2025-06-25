@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shared;
+using System.ComponentModel.DataAnnotations;
 
-namespace FinanceApp.Api.Model.DTO
+namespace FinanceApp.Shared
 {
     public class TransactionRequest
     {
@@ -11,6 +12,6 @@ namespace FinanceApp.Api.Model.DTO
         public DateTime TransDate { get; set; }
         [Required]
         public bool IsIncome { get; set; }
-        public Item Item { get; set; }
+        public ItemDTO Item { get; set; }
     }
 }

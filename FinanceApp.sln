@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceApp.Api", "FinanceApp.Api\FinanceApp.Api.csproj", "{6BB609DE-2C99-5175-4776-802BA3C08D3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{167FCD54-A090-4B46-BC06-8CE71849D588}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{FBFC8798-C458-4551-AD49-7985C1BB85CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{6BB609DE-2C99-5175-4776-802BA3C08D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BB609DE-2C99-5175-4776-802BA3C08D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BB609DE-2C99-5175-4776-802BA3C08D3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167FCD54-A090-4B46-BC06-8CE71849D588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167FCD54-A090-4B46-BC06-8CE71849D588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167FCD54-A090-4B46-BC06-8CE71849D588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167FCD54-A090-4B46-BC06-8CE71849D588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFC8798-C458-4551-AD49-7985C1BB85CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFC8798-C458-4551-AD49-7985C1BB85CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFC8798-C458-4551-AD49-7985C1BB85CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFC8798-C458-4551-AD49-7985C1BB85CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

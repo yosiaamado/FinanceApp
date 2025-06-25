@@ -1,7 +1,7 @@
 ﻿using FinanceApp.Api.Database;
-using FinanceApp.Api.Model.DTO;
 using FinanceApp.Api.IService;
 using FinanceApp.Api.Model;
+using FinanceApp.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApp.Api.Service

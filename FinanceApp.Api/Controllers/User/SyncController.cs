@@ -1,16 +1,12 @@
 ﻿using FinanceApp.Api.IService;
-using FinanceApp.Api.Model.DTO;
-using FinanceApp.Api.Model;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text;
+using FinanceApp.Shared;
 
-namespace FinanceApp.Api.Controllers
+namespace FinanceApp.Api.Controllers.User
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class SyncController : Controller
+    public class SyncController : UserBaseClass
     {
         private ISynchronizeService _syncService;
         public SyncController(ISynchronizeService syncService)

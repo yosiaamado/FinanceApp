@@ -1,11 +1,11 @@
-﻿using FinanceApp.Api.Model;
-using FinanceApp.Api.Model.DTO;
+﻿using FinanceApp.Shared;
 
 namespace FinanceApp.Api.IService
 {
     public interface ISecureService
     {
-        Task<bool> SignUp(User user);
+        Task<bool> SignUp(UserRequest user);
+        Task<bool> CreateUserAdmin(UserRequest request);
         Task<ApiToken> SignIn(LoginRequest user);
         Task<string> SendOtp(string email);
     }

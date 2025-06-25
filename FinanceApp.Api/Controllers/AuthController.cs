@@ -1,14 +1,16 @@
 ﻿using FinanceApp.Api.IService;
 using FinanceApp.Api.Model;
-using FinanceApp.Api.Model.DTO;
+using FinanceApp.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace FinanceApp.Api.Controllers
 {
     [ApiController]
+    [AllowAnonymous]
     [Route("[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private ISecureService _secureService;
         public AuthController(ISecureService secureService)
@@ -39,7 +41,7 @@ namespace FinanceApp.Api.Controllers
         }
         
         [HttpPost("SignUp")]
-        public async Task<IActionResult> SignUp([Required] User request)
+        public async Task<IActionResult> SignUp([Required] UserRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username) && string.IsNullOrWhiteSpace(request.Email))
             {
@@ -50,6 +52,26 @@ namespace FinanceApp.Api.Controllers
             {
                 var result = await _secureService.SignUp(request);
                 return Ok(ApiResponse<bool>.Success(result));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
+            }
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost("create-admin")]
+        public async Task<IActionResult> CreateAdmin([Required] UserRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Username) && string.IsNullOrWhiteSpace(request.Email))
+            {
+                return BadRequest(ApiResponse<string>.FailedMessage("Username and Email is required."));
+            }
+
+            try
+            {
+                var result = await _secureService.CreateUserAdmin(request);
+                return Ok(ApiResponse<bool>.CreatedSuccess());
             }
             catch (Exception ex)
             {

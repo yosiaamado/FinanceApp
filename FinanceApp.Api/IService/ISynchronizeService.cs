@@ -1,4 +1,4 @@
-﻿using FinanceApp.Api.Model.DTO;
+﻿using FinanceApp.Shared;
 
 namespace FinanceApp.Api.IService
 {

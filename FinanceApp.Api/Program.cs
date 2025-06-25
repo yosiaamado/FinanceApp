@@ -1,4 +1,5 @@
 using FinanceApp.Api.Database;
+using FinanceApp.Api.Helper;
 using FinanceApp.Api.IService;
 using FinanceApp.Api.Middleware;
 using FinanceApp.Api.Service;
@@ -20,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 builder.Services.AddTransient<ISecureService, SecureService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
