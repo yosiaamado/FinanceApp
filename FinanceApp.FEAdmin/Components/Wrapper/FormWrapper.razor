@@ -1,0 +1,79 @@
+﻿@typeparam TModel
+@using FinanceApp.FEAdmin.Class.InternalClass
+
+<EditForm Model="Model" OnValidSubmit="OnSubmit">
+    @foreach (var field in Fields)
+    {
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label text-end">@field.Label</label>
+            <div class="col-sm-9">
+                @switch (field.Type)
+                {
+                    case "text":
+                        var valueText = (string)Get(field);
+                        <CustomInput Value="@valueText"
+                                     ValueChanged="val => Set(field, val)"
+                                     class="form-control" />
+                        break;
+
+                    case "number":
+                        var valueNumber = (int)(Get(field) ?? 0);
+                        <CustomInputNumber Value="@valueNumber"
+                                           ValueChanged="val => Set(field, val)"
+                                           class="form-control" />
+                        break;
+                }
+            </div>
+        </div>
+    }
+
+    <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary px-4">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public TModel Model { get; set; }
+    [Parameter] public List<FieldConfig> Fields { get; set; }
+    [Parameter] public EventCallback<TModel> OnValidSubmit { get; set; }
+
+    private async Task OnSubmit()
+    {
+        if (OnValidSubmit.HasDelegate)
+            await OnValidSubmit.InvokeAsync(Model);
+    }
+
+    private object Get(FieldConfig field)
+    {
+        return typeof(TModel).GetProperty(field.Property)?.GetValue(Model) ?? "";
+    }
+
+
+    private void Set(FieldConfig field, object value)
+    {
+        var prop = typeof(TModel).GetProperty(field.Property);
+        if (prop == null) return;
+
+        try
+        {
+            object? converted = prop.PropertyType == typeof(string)
+                ? value?.ToString()
+                : Convert.ChangeType(value, prop.PropertyType);
+
+            prop.SetValue(Model, converted);
+        }
+        catch
+        {
+            Console.WriteLine($"Failed to set value for {field.Property}");
+        }
+    }
+
+    private FieldBinding Bind(FieldConfig field)
+    {
+        return new FieldBinding
+            {
+                Getter = () => Get(field),
+                Setter = val => Set(field, val)
+            };
+    }
+}

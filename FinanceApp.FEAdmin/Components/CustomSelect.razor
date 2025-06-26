@@ -1,0 +1,22 @@
+﻿<select class="@Class" @bind="Value">
+    @if (Options != null)
+    {
+        @foreach (var option in Options)
+        {
+            <option value="@option.Value">@option.Label</option>
+        }
+    }
+</select>
+
+@code {
+    [Parameter] public string Class { get; set; } = "form-select";
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public List<SelectItem>? Options { get; set; }
+
+    public class SelectItem
+    {
+        public string Value { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+    }
+}

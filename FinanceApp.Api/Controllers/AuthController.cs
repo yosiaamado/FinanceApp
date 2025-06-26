@@ -26,20 +26,13 @@ namespace FinanceApp.Api.Controllers
                 return BadRequest(ApiResponse<string>.FailedMessage("Either username or email is required."));
             }
 
-            try
-            {
-                var token = await _secureService.SignIn(request);
-                if (string.IsNullOrEmpty(token.Token))
-                    return Unauthorized(ApiResponse<string>.FailedMessage("Invalid credentials."));
+            var token = await _secureService.SignIn(request);
+            if (string.IsNullOrEmpty(token.Token))
+                return Unauthorized(ApiResponse<string>.FailedMessage("Invalid credentials."));
 
-                return Ok(ApiResponse<ApiToken>.Success(token));
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            return Ok(ApiResponse<ApiToken>.Success(token));
         }
-        
+
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp([Required] UserRequest request)
         {
@@ -48,15 +41,8 @@ namespace FinanceApp.Api.Controllers
                 return BadRequest(ApiResponse<string>.FailedMessage("Username and Email is required."));
             }
 
-            try
-            {
-                var result = await _secureService.SignUp(request);
-                return Ok(ApiResponse<bool>.Success(result));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            var result = await _secureService.SignUp(request);
+            return Ok(ApiResponse<bool>.Success(result));
         }
 
         [Authorize(Roles = "SuperAdmin")]
@@ -68,29 +54,15 @@ namespace FinanceApp.Api.Controllers
                 return BadRequest(ApiResponse<string>.FailedMessage("Username and Email is required."));
             }
 
-            try
-            {
-                var result = await _secureService.CreateUserAdmin(request);
-                return Ok(ApiResponse<bool>.CreatedSuccess());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            var result = await _secureService.CreateUserAdmin(request);
+            return Ok(ApiResponse<bool>.CreatedSuccess());
         }
 
         [HttpPost("send-otp")]
         public async Task<IActionResult> SendOtp([FromQuery] string email)
         {
-            try
-            {
-                var result = await _secureService.SendOtp(email);
-                return Ok(ApiResponse<string>.Success(result));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            var result = await _secureService.SendOtp(email);
+            return Ok(ApiResponse<string>.Success(result));
         }
     }
 }

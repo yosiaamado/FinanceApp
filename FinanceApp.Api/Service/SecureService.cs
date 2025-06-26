@@ -30,13 +30,13 @@ namespace FinanceApp.Api.Service
             var validate = await _context.Users.FirstOrDefaultAsync(u => (u.Email == user.Email || u.Username == user.Username) && u.Role == "User");
 
             if (validate is not null)
-                throw new Exception("Username or Email Already Existed");
+                throw new ConflictException("Username or Email Already Existed");
 
             if (!user.Email.IsValidEmail())
-                throw new Exception("Invalid Email Format");
+                throw new ValidationException("Invalid Email Format");
 
             if (!user.Password.IsValidPassword())
-                throw new Exception("Invalid Password Format");
+                throw new ValidationException("Invalid Password Format");
 
             user.Password = EncryptionHelper.Hash(user.Password);
 
@@ -52,10 +52,10 @@ namespace FinanceApp.Api.Service
             var validate = await _context.Users.FirstOrDefaultAsync(u => (u.Email == user.Email || u.Username == user.Username) && u.Role == "Admin");
 
             if (validate is not null)
-                throw new Exception("Username or Email Already Existed");
+                throw new ConflictException("Username or Email Already Existed");
 
             if (!user.Email.IsValidEmail())
-                throw new Exception("Invalid Email Format");
+                throw new ValidationException("Invalid Email Format");
 
             user.Password = EncryptionHelper.Hash(_config["AppSettings:DefaultAdminPassword"]!);
 
@@ -70,11 +70,11 @@ namespace FinanceApp.Api.Service
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username || u.Email == request.Email);
 
             if (user is null)
-                throw new Exception("User Not Existed!");
+                throw new NotFoundException("User Not Existed!");
 
             var isMatch = EncryptionHelper.Verify(request.Password, user.Password);
             if (!isMatch)
-                throw new Exception("Invalid Password");
+                throw new ValidationException("Invalid Password");
 
             var result = GenerateToken(user);
             return result;
@@ -85,7 +85,7 @@ namespace FinanceApp.Api.Service
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user is null)
-                throw new Exception("User Not Existed!");
+                throw new NotFoundException("User Not Existed!");
 
             return "result";
         }

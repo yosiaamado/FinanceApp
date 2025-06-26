@@ -1,0 +1,36 @@
+﻿@page "/dashboard"
+@inject HttpClient Http
+
+<div class="container mt-4">
+    <h4>Job Scheduler Overview</h4>
+
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Total Jobs</h5>
+                    <p>@totalJobs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Failed Jobs</h5>
+                    <p>@failedJobs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalJobs = 0;
+    private int failedJobs = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // totalJobs = await Http.GetFromJsonAsync<int>("api/stats/totalJobs");
+        // failedJobs = await Http.GetFromJsonAsync<int>("api/stats/failedJobs");
+    }
+}

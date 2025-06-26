@@ -1,0 +1,70 @@
+﻿@using FinanceApp.FEAdmin.Components.Wrapper.ActionRegistry
+@typeparam TItem
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            @foreach (var column in Columns)
+            {
+                <th>@column</th>
+            }
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Data)
+        {
+            <tr>
+                @foreach (var selector in ColumnSelectors)
+                {
+                    <td>@selector(item)</td>
+                }
+                <td>
+                    @if(EditStates.TryGetValue(item, out var isEditing) && isEditing)
+                    {
+                        <button class="btn btn-success btn-sm" @onclick="() => SaveItem(item)"><span class="fas fa-save"></span></button>
+                    }
+                    else
+                    {
+                        @if (UseEdit)
+                        {
+                            <button class="btn btn-warning btn-sm" @onclick="() => EnableEdit(item)">Edit</button>
+                        }
+                        @if (UseDelete)
+                        {
+                            <button class="btn btn-danger btn-sm" @onclick="() => DeleteItem(item)">Delete</button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter] public List<string> Columns { get; set; }
+    [Parameter] public List<Func<TItem, object>> ColumnSelectors { get; set; }
+    [Parameter] public List<TItem> Data { get; set; }
+    [Parameter] public Dictionary<TItem, bool> EditStates { get; set; }
+    [Parameter] public EventCallback<TItem> OnDelete { get; set; }
+    [Parameter] public EventCallback<TItem> OnSave { get; set; }
+
+    [Parameter] public bool UseEdit { get; set; }
+    [Parameter] public bool UseDelete { get; set; }
+
+    private void EnableEdit(TItem item)
+    {
+        EditStates[item] = true;
+    }
+
+    private async Task SaveItem(TItem item)
+    {
+        EditStates[item] = false;
+        await OnSave.InvokeAsync();
+    }
+
+    private async Task DeleteItem(TItem item)
+    {
+        await OnDelete.InvokeAsync();
+    }
+}

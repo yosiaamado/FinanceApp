@@ -106,7 +106,7 @@ namespace FinanceApp.Api.Service
             var tempItem = await _context.TempItems.FirstOrDefaultAsync(i => i.Id == id);
 
             if (tempItem is null)
-                throw new Exception("Temp item doesn't exists");
+                throw new NotFoundException("Temp item doesn't exists");
 
             var item = await _context.Items.FirstOrDefaultAsync(i => i.Name == tempItem.Name);
             tempItem.IsReviewed = true;

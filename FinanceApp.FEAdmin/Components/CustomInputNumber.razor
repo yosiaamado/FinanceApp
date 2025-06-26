@@ -1,0 +1,8 @@
+﻿<InputNumber TValue="int" @bind-Value="Value" class="@Class" placeholder="@Placeholder" />
+
+@code {
+    [Parameter] public int Value { get; set; }
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public string Placeholder { get; set; }
+}

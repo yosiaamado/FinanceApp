@@ -6,12 +6,14 @@ namespace FinanceApp.Api.IService
     public interface ICoreService
     {
         Task<PagedResult<Item>> GetItems(int page, int pageSize, string? search = null);
-        Task<Item> GetItems(Int64 id);
+        Task<Item> GetItem(Int64 id);
 
         #region Admin
-        Task<bool> AddItem(ItemRequest item);
-        Task<bool> UpdateItem(ItemRequest item);
-        Task<bool> FinalizeTempItem(int id, int categoryId);
+        Task<PagedResult<TempItem>> GetTempItems(int page, int pageSize, string? search = null);
+        Task<TempItem> GetTempItem(Int64 id);
+        Task AddItem(ItemRequest item);
+        Task UpdateItem(ItemRequest item);
+        Task FinalizeTempItem(int id, int categoryId);
         #endregion
     }
 }

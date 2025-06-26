@@ -19,42 +19,21 @@ namespace FinanceApp.Api.Controllers.Admin
         [HttpPost("add-item")]
         public async Task<IActionResult> AddItem(ItemRequest request)
         {
-            try
-            {
-                var token = await _coreService.AddItem(request);
-                return Ok(ApiResponse<bool>.CreatedSuccess());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            await _coreService.AddItem(request);
+            return Ok(ApiResponse<bool>.CreatedSuccess());
         }
 
         [HttpPost("update-item")]
         public async Task<IActionResult> UpdateItem(ItemRequest request)
         {
-            try
-            {
-                var token = await _coreService.UpdateItem(request);
-                return Ok(ApiResponse<bool>.CreatedSuccess());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            await _coreService.UpdateItem(request);
+            return Ok(ApiResponse<bool>.CreatedSuccess());
         }
         [HttpPost("finalize-temp-item")]
         public async Task<IActionResult> FinalizeTempItem(int id, int categoryId)
         {
-            try
-            {
-                var result = await _coreService.FinalizeTempItem(id, categoryId);
-                return Ok(ApiResponse<bool>.CreatedSuccess());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.FailedMessage("Server error: " + ex.Message));
-            }
+            await _coreService.FinalizeTempItem(id, categoryId);
+            return Ok(ApiResponse<bool>.CreatedSuccess());
         }
         #endregion
     }

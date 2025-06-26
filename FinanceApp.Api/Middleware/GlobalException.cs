@@ -22,17 +22,22 @@ namespace FinanceApp.Api.Middleware
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = 404;
-                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "404"));
+                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "-1"));
             }
             catch (ConflictException ex)
             {
                 context.Response.StatusCode = 409;
-                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "409"));
+                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "2"));
             }
             catch (ValidationException ex)
             {
                 context.Response.StatusCode = 400;
-                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "400"));
+                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "1"));
+            }
+            catch (UnauthorizedException ex)
+            {
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsJsonAsync(ApiResponse<string>.FailedMessage(ex.Message, "99"));
             }
             catch (Exception ex)
             {

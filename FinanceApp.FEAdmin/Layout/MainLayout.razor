@@ -1,0 +1,45 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row d-flex justify-content-start px-4">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <h3>@Title</h3>
+            }
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    private string Title => GetTitleForRoute(Navigation.Uri);
+
+    private string GetTitleForRoute(string uri)
+    {
+        var route = uri.Replace(Navigation.BaseUri, "").TrimEnd('/');
+        if (string.IsNullOrWhiteSpace(route))
+            return "Dashboard";
+
+        var segments = route.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var title = string.Join(" ", segments.Select(s =>
+            System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                s.Replace("-", " ").Replace("_", " "))));
+
+        return title;
+    }
+
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += (_, __) => StateHasChanged();
+    }
+}

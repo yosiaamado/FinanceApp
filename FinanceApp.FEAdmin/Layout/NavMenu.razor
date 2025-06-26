@@ -1,0 +1,47 @@
+﻿@using FinanceApp.FEAdmin.Class.InternalClass
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Finance App</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="nav flex-column">
+        @foreach (var item in menuItems)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center py-2" href="@item.Href" Match="@item.Match">
+                    <span class="d-inline-flex justify-content-center align-items-center" style="width: 33%;">
+                        <i class="bi @item.Icon fs-5"></i>
+                    </span>
+                    <span class="d-inline-flex align-items-center" style="width: 67%; text-align: start;">
+                        @item.Title
+                    </span>
+                </NavLink>
+            </div>
+        }
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private List<NavItem> menuItems = new()
+    {
+        new NavItem { Title = "Dashboard", Icon = "bi-speedometer2", Href = "dashboard", Match = NavLinkMatch.All },
+        new NavItem { Title = "Items", Icon = "bi-box-seam", Href = "items" },
+        new NavItem { Title = "Temp Items", Icon = "bi-hourglass-split", Href = "temp-items" },
+        new NavItem { Title = "Category", Icon = "bi-tags", Href = "categories" },
+        new NavItem { Title = "Transaction", Icon = "bi-cash-stack", Href = "transactions" },
+    };
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

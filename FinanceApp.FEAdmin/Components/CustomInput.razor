@@ -1,0 +1,23 @@
+﻿<InputText @bind-Value="Value" class="@Class" placeholder="@Placeholder" />
+
+@code {
+    private string _value;
+
+    [Parameter]
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            if (_value != value)
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public string Placeholder { get; set; }
+}

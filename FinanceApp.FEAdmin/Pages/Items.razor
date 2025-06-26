@@ -1,0 +1,36 @@
+﻿@page "/items"
+@using FinanceApp.FEAdmin.Class
+@using FinanceApp.FEAdmin.Class.InternalClass
+@using FinanceApp.FEAdmin.Components.Wrapper
+@using FinanceApp.Shared
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<div class="container mt-4">
+    <TableWrapper TItem="Item"
+    Columns='new() { "Name", "Status", "Cron" }'
+    ColumnSelectors='new() { item => item.Name, item => item.CategoryId }'
+    UseEdit="true"
+    UseDelete="false"
+    OnSave=""
+    Data="@items" />
+</div>
+
+@code {
+    private List<Item> items = new();
+    private List<Category>? categories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // categories = await Http.GetFromJsonAsync<List<Category>>("api/admin/category/get-all");
+    }
+
+    private async Task OnSave()
+    {
+        Item newItem = new();
+        var response = await Http.PostAsJsonAsync<Item>("", newItem);
+
+        HttpResponse resp = await response.ObjectValue<HttpResponse>();
+    }
+}
