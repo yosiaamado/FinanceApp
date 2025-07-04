@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinanceApp.Shared\FinanceApp.Shared.csproj" />
-    <ProjectReference Include="..\Shared\FinanceApp.Shared.csproj" />
   </ItemGroup>
 
 </Project>

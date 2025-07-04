@@ -1,7 +1,7 @@
+using AIClassifierLib.Extensions;
 using FinanceApp.Api.Database;
 using FinanceApp.Api.Helper;
 using FinanceApp.Api.IService;
-using FinanceApp.Api.Middleware;
 using FinanceApp.Api.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +20,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration["AppSettings:DefaultConnection"])
 );
 
+builder.Services.AddItemClassifier();
+
+builder.Services.AddScoped<EngineHelper>();
 builder.Services.AddTransient<ISecureService, SecureService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Net.Http.Json;
-using System.Runtime.InteropServices.ObjectiveC;
 
 namespace FinanceApp.Shared
 {
@@ -13,7 +11,7 @@ namespace FinanceApp.Shared
 
             return newObj;
         }
-        public static T ParseObject<T>(this dynamic message)
+        public static T ParseObject<T>(this object message)
         {
             if (message is string json)
             {

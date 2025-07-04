@@ -29,6 +29,11 @@ namespace FinanceApp.Api.Database
                 .HasForeignKey(i => i.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<TempItem>()
+                .HasOne(i => i.Category)
+                .WithMany(c => c.TempItems)
+                .HasForeignKey(i => i.CategoryId);
+
             modelBuilder.Entity<Transaction>()
                 .HasOne(i => i.Item)
                 .WithMany(c => c.Transactions)

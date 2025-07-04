@@ -10,5 +10,7 @@ namespace FinanceApp.Api.Model
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsReviewed { get; set; } = false;
         public bool MovedToItemTable = false;
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

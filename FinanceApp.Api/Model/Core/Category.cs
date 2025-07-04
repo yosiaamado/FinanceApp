@@ -10,5 +10,6 @@ namespace FinanceApp.Api.Model
         [Required]
         public string Name { get; set; }
         public ICollection<Item> Items { get; set; } = new List<Item>();
+        public ICollection<TempItem> TempItems { get; set; } = new List<TempItem>();
     }
 }

@@ -4,6 +4,9 @@ using FinanceApp.Api.IService;
 using FinanceApp.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using FinanceApp.Shared;
+using FinanceApp.Api.Helper;
+using AIClassifierLib.Interface;
+using Newtonsoft.Json;
 
 namespace FinanceApp.Api.Service
 {
@@ -12,12 +15,18 @@ namespace FinanceApp.Api.Service
         public readonly IConfiguration _config;
         public readonly AppDbContext _context;
         public readonly IMapper _mapper;
+        public readonly EngineHelper _engineHelper;
+        public readonly IItemClassifierEngine _itemEngine;
+        public readonly IServiceScopeFactory _scopeFactory;
 
-        public TransactionService(IConfiguration configuration, AppDbContext context, IMapper mapper)
+        public TransactionService(IConfiguration configuration, AppDbContext context, IMapper mapper, EngineHelper engineHelper, IItemClassifierEngine itemEngine, IServiceScopeFactory scopeFactory)
         {
             _config = configuration;
             _context = context;
             _mapper = mapper;
+            _engineHelper = engineHelper;
+            _itemEngine = itemEngine;
+            _scopeFactory = scopeFactory;
         }
 
         public async Task<PagedResult<Transaction>> GetTransactions(int page = 1, int pageSize = 10, DateTime? startDate = null, DateTime? endDate = null, string? item = null)
@@ -81,14 +90,18 @@ namespace FinanceApp.Api.Service
 
                 if (!alreadyTemp)
                 {
-                    var tempItem = new TempItem
+                    _ = Task.Run(async () =>
                     {
-                        Name = request.Item.Name,
-                        IsReviewed = false,
-                        CreatedAt = DateTime.Now,
-                        MovedToItemTable = false
-                    };
-                    await _context.TempItems.AddAsync(tempItem);
+                        using var scope = _scopeFactory.CreateScope();
+
+                        var engine = scope.ServiceProvider.GetRequiredService<EngineHelper>();
+
+                        var requestClone = JsonConvert.DeserializeObject<TransactionRequest>(
+                            JsonConvert.SerializeObject(request)
+                        );
+
+                        await _engineHelper.FillCategoryInTempItem(request);
+                    });
                 }
             }
 
