@@ -12,6 +12,8 @@ namespace FinanceApp.Api.Database
         public DbSet<TempItem> TempItems { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(new User
